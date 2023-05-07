@@ -309,24 +309,63 @@ function CountPixels(tMat, height, width, MatImage){
 
   let max_length = 0;
   let max_id = -1;
-  let max_y = 0;
-  let max_num = 0;
+  let max_y; // 座標
+  let ids; // idを記憶
+  let places;
   for(let i=0; i<lines.length; i++){ // check longest line
     let tmp = Math.abs(lines[i][0].x-lines[i][1].x);
     if(tmp>max_length){
       if(10<lines[i][0].y & lines[i][0].y<1000){
         max_length = tmp;
         max_id = i;
-        max_y = lines[i][0].y;
-        max_num = 1;
+        max_y = [lines[i][0].y];
+        ids = [i];
+        if(lines[i][0].y>height/2){
+          places = [1];
+        }else{
+          places = [0];
+        }
       }
     }
     else if(tmp == max_length){
-      max_y += lines[i][0].y;
-      max_num += 1;
+      max_y.push(lines[i][0].y);
+      ids.push(i);
+      if(lines[i][0].y>height/2){
+        // lower
+        places.push(1);
+      }else{
+        // upper
+        places.push(0);
+      }
     }
   }
   if(max_id != -1){ // if line is detected
+
+    // calculate y
+    let cand_y = [];
+    if(max_y.length > 1){
+      // 同じ長さの線が複数存在した場合
+      let total = places.reduce(function(sum, element){return sum+element;},0);
+      if(total>max_y.length/2){
+        // lower
+        for(let i=0; i<places.length; i++){
+          if(places[i]==1){
+            cand_y.push([ids[i], max_y[i]]);
+          }
+        }
+      }else{
+        // upper
+        for(let i=0; i<places.length; i++){
+          if(places[i]==0){
+            cand_y.push([ids[i], max_y[i]]);
+          }
+        }
+      }
+      // console.log('before:', cand_y);
+      // merge_sort(cand_y);
+      // console.log('after :', cand_y);
+    }
+    let ave_y = lines[cand_y[parseInt(cand_y.length/2)][0]][0].y;
 
     // set variables
     let mid_x = parseInt((lines[max_id][0].x+lines[max_id][1].x)/2);
@@ -340,12 +379,6 @@ function CountPixels(tMat, height, width, MatImage){
     let r_max = 0;
     let r_idx = 0;
 
-    // calculate y
-    let tmp = max_y/max_num;
-    let ave_y = parseInt(tmp);
-    if(tmp-ave_y >= 0.5){
-      ave_y += 0;
-    }
 
     console.log('ave_y:', ave_y);
 
@@ -380,8 +413,9 @@ function CountPixels(tMat, height, width, MatImage){
     console.log('count pixels');
     console.log('left color:', l_sum, ' right color:', r_sum);
     console.log('left color:', tmp_color[l_idx], ' right color:', tmp_color[r_idx]);
-    cv.line(imgMat, new cv.Point(mid_x-diff_length-2, ave_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    cv.line(imgMat, new cv.Point(mid_x+diff_length-2, ave_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    cv.line(imgMat, new cv.Point(lines[max_id][0].x, ave_y), new cv.Point(lines[max_id][1].x, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x-diff_length-2, ave_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x+diff_length-2, ave_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
     textArea.innerHTML = ' count:' + String(tmp_color[l_idx]) + ', ' + String(tmp_color[r_idx]);
   }
 
@@ -481,6 +515,63 @@ function fusion_lines(lineA, lineB){
   let new_line = [new cv.Point(x1, y), new cv.Point(x2, y), 0];
 
   return [new_line, 1];
+}
+
+//datas 並べ替えをする配列
+function merge_sort(datas) {
+ // 要素数
+ const COUNT = datas.length;
+ // 要素数が 1 以下の場合
+ if (COUNT <= 1) {
+   return;
+ }
+ // 中央の添字
+ const CENTER = Math.floor(COUNT / 2);
+ // 中央で分割した配列
+ let leftData = datas.slice(0, CENTER);
+ let rightData = datas.slice(CENTER);
+ // 各配列のマージソート
+ merge_sort(leftData);
+ merge_sort(rightData);
+ // 結合後の配列
+ const mergedData = [];
+ // 分割した配列の要素数
+ let count1 = leftData.length;
+ let count2 = rightData.length;
+ 
+ let i = 0;
+ let j = 0;
+ 
+ // 両方の配列に要素がある間
+ while (i < count1 && j < count2) {
+   //比較する値
+   let value1 = leftData[i][1];
+   let value2 = rightData[j][1];
+
+   if (value1 <= value2) {
+     // value1とvalue2が等しい OR value1 が小さい場合
+     mergedData.push(leftData[i]);
+     i++;
+   } else {
+     // value2 が小さい場合
+     mergedData.push(rightData[j]);
+     j++;
+   }
+ }
+ // leftDataに要素がある間
+ while (i < count1) {
+   mergedData.push(leftData[i]);
+   i++;
+ }
+ // rightDataに要素がある間
+ while (j < count2) {
+   mergedData.push(rightData[j]);
+   j++;
+ }
+ // 元の配列にソートした配列を当てはめる。
+ for (let i = 0; i < COUNT; i++) {
+   datas[i] = mergedData[i];
+ }
 }
 
 
