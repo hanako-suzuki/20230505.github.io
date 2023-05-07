@@ -267,20 +267,22 @@ function houghDetection(tMat, height, width, MatImage1){
 // detected lines by count pixels(loose)
 function CountPixels(tMat, height, width, MatImage){
   // set variables
-  let outMat = tMat.clone();
   let imgMat = MatImage.clone();
+  let outMat = tMat.clone();
   let num = width*0.1;
   let cnt = 0;
   let start_x = width;
   let end_x = 0;
   let lines = []; // [startPoint, endPoint]
-  let delta = 3;
+  let delta = 4;
+  let w_list;
 
-  for(let row=0; row<height; row++){
+  for(let row=10; row<height-10; row++){
     // reset variables
     cnt = 0; // rowで検出されたピクセルをカウント
     start_x = width;
     end_x = 0;
+    w_list = [];
 
     for(let r=row-delta; r<=row+delta; r++){
       if(r>height){
@@ -288,22 +290,24 @@ function CountPixels(tMat, height, width, MatImage){
       }
       // detect lines
       for(let col=0; col<width; col++){
-        data = outMat.ucharPtr(r, col);
-        for(let c = col-delta; c<=col+delta; c++){
-        // 検出されているピクセルならカウント
-        if(data[0]!=0 || data[1]!=0 || data[2]!=0){
-          cnt++;
-          if(col<start_x){
-            start_x = col;
+        if(col in w_list == false){
+          data = outMat.ucharPtr(r, col);
+          // 検出されているピクセルならカウント
+          if(data[0]!=0 || data[1]!=0 || data[2]!=0){
+            cnt++;
+            w_list.push(col);
+            if(col<start_x){
+              start_x = col;
+            }
+            if(col>end_x){
+              end_x = col;
+            }
           }
-          if(col>end_x){
-            end_x = col;
-          }
-        }}
+        }
       }
-      if(cnt>num){
-        lines.push([new cv.Point(start_x, row), new cv.Point(end_x, row)]);
-      }
+    }
+    if(cnt>num){
+      lines.push([new cv.Point(start_x, row), new cv.Point(end_x, row)]);
     }
   }
 
@@ -315,19 +319,16 @@ function CountPixels(tMat, height, width, MatImage){
   for(let i=0; i<lines.length; i++){ // check longest line
     let tmp = Math.abs(lines[i][0].x-lines[i][1].x);
     if(tmp>max_length){
-      if(10<lines[i][0].y & lines[i][0].y<1000){
-        max_length = tmp;
-        max_id = i;
-        max_y = [lines[i][0].y];
-        ids = [i];
-        if(lines[i][0].y>height/2){
-          places = [1];
-        }else{
-          places = [0];
-        }
+      max_length = tmp;
+      max_id = i;
+      max_y = [lines[i][0].y];
+      ids = [i];
+      if(lines[i][0].y>height/2){
+        places = [1];
+      }else{
+        places = [0];
       }
-    }
-    else if(tmp == max_length){
+    }else if(tmp == max_length & tmp!=0){
       max_y.push(lines[i][0].y);
       ids.push(i);
       if(lines[i][0].y>height/2){
@@ -343,7 +344,7 @@ function CountPixels(tMat, height, width, MatImage){
 
     // calculate y
     let cand_y = [];
-    let ave_y;
+    let mid_y;
     if(max_y.length > 1){
       // 同じ長さの線が複数存在した場合
       let total = places.reduce(function(sum, element){return sum+element;},0);
@@ -365,14 +366,15 @@ function CountPixels(tMat, height, width, MatImage){
       // console.log('before:', cand_y);
       // merge_sort(cand_y);
       // console.log('after :', cand_y);
-      ave_y = lines[cand_y[parseInt(cand_y.length/2)][0]][0].y;
+      console.log('cand_y :', cand_y);
+      mid_y = lines[cand_y[parseInt(cand_y.length/2)][0]][0].y;
     }else{
-      ave_y = lines[max_id][0].y;
+      mid_y = lines[max_id][0].y;
     }
 
     // set variables
     let mid_x = parseInt((lines[max_id][0].x+lines[max_id][1].x)/2);
-    let mid_y = lines[max_id][0].y;
+    // let mid_y = lines[max_id][0].y;
     let tmp_length = max_length/4;
     let diff_length = parseInt(tmp_length/2);
     let l_sum = [0,0,0];
@@ -382,19 +384,18 @@ function CountPixels(tMat, height, width, MatImage){
     let r_max = 0;
     let r_idx = 0;
 
-
-    console.log('ave_y:', ave_y);
+    console.log('mid_y:', mid_y);
 
     // check left brightness
     for(let i=mid_x-diff_length-2; i<mid_x-diff_length+2; i++){
-      let data = imgMat.ucharPtr(ave_y, i);
+      let data = imgMat.ucharPtr(mid_y, i);
       for(let j=0; j<3; j++){
         l_sum[j] += data[j]/4;
       }
     }
     // check right brightness
     for(let i=mid_x+diff_length-2; i<mid_x+diff_length+2; i++){
-      data = imgMat.ucharPtr(ave_y, i);
+      data = imgMat.ucharPtr(mid_y, i);
       for(let j=0; j<3; j++){
         r_sum[j] += data[j]/4;
       }
@@ -413,12 +414,12 @@ function CountPixels(tMat, height, width, MatImage){
     }
 
     let tmp_color = ["red", "green", "blue"];
-    console.log('count pixels');
+    console.log('count');
     console.log('left color:', l_sum, ' right color:', r_sum);
     console.log('left color:', tmp_color[l_idx], ' right color:', tmp_color[r_idx]);
-    cv.line(imgMat, new cv.Point(lines[max_id][0].x, ave_y), new cv.Point(lines[max_id][1].x, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    // cv.line(imgMat, new cv.Point(mid_x-diff_length-2, ave_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    // cv.line(imgMat, new cv.Point(mid_x+diff_length-2, ave_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x-diff_length-2, mid_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x+diff_length-2, mid_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    cv.line(imgMat, new cv.Point(lines[max_id][0].x, mid_y), new cv.Point(lines[max_id][1].x, mid_y), new cv.Scalar(255,0,0), thickness=3);
     textArea.innerHTML = ' count:' + String(tmp_color[l_idx]) + ', ' + String(tmp_color[r_idx]);
   }
 
