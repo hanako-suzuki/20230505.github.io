@@ -134,6 +134,8 @@ function successCallback(stream) {
           }
         }
 
+        cv.imshow("canvas", outMat);
+
         // hough lines detection
         houghDetection(outMat, height, width, videoMat1);
 
@@ -258,7 +260,7 @@ function houghDetection(tMat, height, width, MatImage1){
     textArea.innerHTML = 'hough:' + String(tmp_color[l_idx]) + ', ' + String( tmp_color[r_idx]);
   }
 
-  cv.imshow("canvas", imgMat);
+  // cv.imshow("canvas", imgMat);
   // cv.imshow("canvasOutput3", outMat);
 }
 
@@ -369,6 +371,42 @@ function CountPixels(tMat, height, width, MatImage){
   }
 
   // cv.imshow("canvasOutput5", imgMat);
+}
+
+function Jump(l_color, r_color){
+  if(l_color==0 & r_color==0){ //      RR LED1-1
+    // to katsurai Lab.
+    window.location.href = 'https://mm.doshisha.ac.jp/';
+  }
+  else if(l_color==0 & r_color==1){ // RG LED1-2
+    // to flyby html
+    window.location.href = 'https://flyby.co.jp/';
+
+  }
+  else if(l_color==0 & r_color==2){ // RB LED2-1
+    // stamp1
+  }
+  else if(l_color==1 & r_color==0){ // GR LED2-2
+    // stamp2
+  }
+  else if(l_color==1 & r_color==1){ // GG LED3-1
+    // AR or photo frame?
+  }
+  else if(l_color==1 & r_color==2){ // GB LED3-2
+    // AR or photo frame?
+  }
+  else if(l_color==2 & r_color==0){ // BR LED4-1
+    // to LAR html
+    window.location.href = 'https://web.tuat.ac.jp/~yu-nakayama/luminaryar.html';
+  }
+  else if(l_color==2 & r_color==1){ // BG LED4-2
+    // to LAR html  <same as BR>
+    window.location.href = 'https://web.tuat.ac.jp/~yu-nakayama/luminaryar.html';
+  }
+  else if(l_color==2 & r_color==2){ // BB LED5
+    // to neural html
+    window.location.href = 'https://www.neuralmarketing.co.jp/';
+  }
 }
 
 
