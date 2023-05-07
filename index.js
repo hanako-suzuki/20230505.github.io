@@ -125,7 +125,7 @@ function successCallback(stream) {
             //   outMat.ucharPtr(row,col)[2] = sum[2];
             //   // console.log("x:", col, " y:", row, " sum:", sum);
             // }
-            if(120<sum[0] & sum[0]<200 & sum[1]<100 & 105<sum[2] & sum[2]<175){ // iPhone application
+            if(140<sum[0] & sum[0]<220 & sum[1]<120 & 80<sum[2] & sum[2]<160){ // iPhone application
               outMat.ucharPtr(row,col)[0] = sum[0];
               outMat.ucharPtr(row,col)[1] = sum[1];
               outMat.ucharPtr(row,col)[2] = sum[2];
