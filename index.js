@@ -247,9 +247,11 @@ function houghDetection(tMat, height, width, MatImage1){
     console.log('left color:', l_sum, ' right color:', r_sum);
     console.log('left color:', tmp_color[l_idx], ' right color:', tmp_color[r_idx]);
     // cv.line(outMat, fuse_lines[max_id][0], fuse_lines[max_id][1], new cv.Scalar(255,0,0), thickness=3);
-    cv.line(imgMat, new cv.Point(mid_x-diff_length-2, mid_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    cv.line(imgMat, new cv.Point(mid_x+diff_length-2, mid_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x-diff_length-2, mid_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x+diff_length-2, mid_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    textArea.innerHTML = 'hough:' + String(tmp_color[l_idx]) + ', ' + String( tmp_color[r_idx]);
   }
+
   // cv.imshow("canvasOutput3", imgMat);
   // cv.imshow("canvasOutput3", outMat);
 }
@@ -355,8 +357,9 @@ function CountPixels(tMat, height, width, MatImage){
     console.log('count pixels');
     console.log('left color:', l_sum, ' right color:', r_sum);
     console.log('left color:', tmp_color[l_idx], ' right color:', tmp_color[r_idx]);
-    cv.line(imgMat, new cv.Point(mid_x-diff_length-2, mid_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    cv.line(imgMat, new cv.Point(mid_x+diff_length-2, mid_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x-diff_length-2, mid_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    // cv.line(imgMat, new cv.Point(mid_x+diff_length-2, mid_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    textArea.innerHTML += ' count:' + String(tmp_color[l_idx]) + ', ' + String(tmp_color[r_idx]);
   }
 
   // cv.imshow("canvasOutput5", imgMat);
