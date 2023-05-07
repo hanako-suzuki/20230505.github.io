@@ -134,10 +134,10 @@ function successCallback(stream) {
           }
         }
 
-        cv.imshow("canvas", outMat);
+        // cv.imshow("canvas", outMat);
 
-        // hough lines detection
-        houghDetection(outMat, height, width, videoMat1);
+        // // hough lines detection
+        // houghDetection(outMat, height, width, videoMat1);
 
         // count pixels
         CountPixels(outMat, height, width, videoMat1);
@@ -309,13 +309,21 @@ function CountPixels(tMat, height, width, MatImage){
 
   let max_length = 0;
   let max_id = -1;
+  let max_y = 0;
+  let max_num = 0;
   for(let i=0; i<lines.length; i++){ // check longest line
     let tmp = Math.abs(lines[i][0].x-lines[i][1].x);
     if(tmp>max_length){
       if(10<lines[i][0].y & lines[i][0].y<1000){
         max_length = tmp;
         max_id = i;
+        max_y = lines[i][0].y;
+        max_num = 1;
       }
+    }
+    else if(tmp == max_length){
+      max_y += lines[i][0].y;
+      max_num += 1;
     }
   }
   if(max_id != -1){ // if line is detected
@@ -332,18 +340,25 @@ function CountPixels(tMat, height, width, MatImage){
     let r_max = 0;
     let r_idx = 0;
 
-    console.log('mid_y:', mid_y);
+    // calculate y
+    let tmp = max_y/max_num;
+    let ave_y = parseInt(tmp);
+    if(tmp-ave_y >= 0.5){
+      ave_y += 0;
+    }
+
+    console.log('ave_y:', ave_y);
 
     // check left brightness
     for(let i=mid_x-diff_length-2; i<mid_x-diff_length+2; i++){
-      let data = imgMat.ucharPtr(mid_y, i);
+      let data = imgMat.ucharPtr(ave_y, i);
       for(let j=0; j<3; j++){
         l_sum[j] += data[j]/4;
       }
     }
     // check right brightness
     for(let i=mid_x+diff_length-2; i<mid_x+diff_length+2; i++){
-      data = imgMat.ucharPtr(mid_y, i);
+      data = imgMat.ucharPtr(ave_y, i);
       for(let j=0; j<3; j++){
         r_sum[j] += data[j]/4;
       }
@@ -365,12 +380,12 @@ function CountPixels(tMat, height, width, MatImage){
     console.log('count pixels');
     console.log('left color:', l_sum, ' right color:', r_sum);
     console.log('left color:', tmp_color[l_idx], ' right color:', tmp_color[r_idx]);
-    // cv.line(imgMat, new cv.Point(mid_x-diff_length-2, mid_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    // cv.line(imgMat, new cv.Point(mid_x+diff_length-2, mid_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
-    textArea.innerHTML += ' count:' + String(tmp_color[l_idx]) + ', ' + String(tmp_color[r_idx]);
+    cv.line(imgMat, new cv.Point(mid_x-diff_length-2, ave_y), new cv.Point(mid_x-diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    cv.line(imgMat, new cv.Point(mid_x+diff_length-2, ave_y), new cv.Point(mid_x+diff_length+2, mid_y), new cv.Scalar(255,0,0), thickness=3);
+    textArea.innerHTML = ' count:' + String(tmp_color[l_idx]) + ', ' + String(tmp_color[r_idx]);
   }
 
-  // cv.imshow("canvasOutput5", imgMat);
+  cv.imshow("canvas", imgMat);
 }
 
 function Jump(l_color, r_color){
