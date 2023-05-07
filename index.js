@@ -343,6 +343,7 @@ function CountPixels(tMat, height, width, MatImage){
 
     // calculate y
     let cand_y = [];
+    let ave_y;
     if(max_y.length > 1){
       // 同じ長さの線が複数存在した場合
       let total = places.reduce(function(sum, element){return sum+element;},0);
@@ -364,8 +365,10 @@ function CountPixels(tMat, height, width, MatImage){
       // console.log('before:', cand_y);
       // merge_sort(cand_y);
       // console.log('after :', cand_y);
+      ave_y = lines[cand_y[parseInt(cand_y.length/2)][0]][0].y;
+    }else{
+      ave_y = lines[max_id][0].y;
     }
-    let ave_y = lines[cand_y[parseInt(cand_y.length/2)][0]][0].y;
 
     // set variables
     let mid_x = parseInt((lines[max_id][0].x+lines[max_id][1].x)/2);
