@@ -125,11 +125,16 @@ function successCallback(stream) {
             //   outMat.ucharPtr(row,col)[2] = sum[2];
             //   // console.log("x:", col, " y:", row, " sum:", sum);
             // }
-            if(140<sum[0] & sum[0]<220 & sum[1]<120 & 80<sum[2] & sum[2]<160){ // iPhone application
+            // if(140<sum[0] & sum[0]<220 & sum[1]<120 & 80<sum[2] & sum[2]<160){ // iPhone application
+            //   outMat.ucharPtr(row,col)[0] = sum[0];
+            //   outMat.ucharPtr(row,col)[1] = sum[1];
+            //   outMat.ucharPtr(row,col)[2] = sum[2];
+            // }
+
+            if(145<sum[0] & sum[0]<185 & sum[1]<120 & 80<sum[2] & sum[2]<120){ // iPhone application
               outMat.ucharPtr(row,col)[0] = sum[0];
               outMat.ucharPtr(row,col)[1] = sum[1];
               outMat.ucharPtr(row,col)[2] = sum[2];
-              // console.log("x:", col, " y:", row, " sum:", sum);
             }
           }
         }
@@ -274,7 +279,7 @@ function CountPixels(tMat, height, width, MatImage){
   let start_x = width;
   let end_x = 0;
   let lines = []; // [startPoint, endPoint]
-  let delta = 4;
+  let delta = 5;
   let w_list;
 
   for(let row=10; row<height-10; row++){
@@ -434,19 +439,22 @@ function Jump(l_color, r_color){
   else if(l_color==0 & r_color==1){ // RG LED1-2
     // to flyby html
     window.location.href = 'https://flyby.co.jp/';
-
   }
   else if(l_color==0 & r_color==2){ // RB LED2-1
     // stamp1
+    window.location.href = 'https://hanako-suzuki.github.io/EXPO-contents.github.io/lot.html';
   }
   else if(l_color==1 & r_color==0){ // GR LED2-2
     // stamp2
+    window.location.href = 'https://hanako-suzuki.github.io/EXPO-contents.github.io/stamp.html';
   }
   else if(l_color==1 & r_color==1){ // GG LED3-1
-    // AR or photo frame?
+    // photo frame
+    window.location.href = 'https://hanako-suzuki.github.io/EXPO-contents.github.io/frame.html';
   }
   else if(l_color==1 & r_color==2){ // GB LED3-2
-    // AR or photo frame?
+    // fish frame
+    window.location.href = 'https://hanako-suzuki.github.io/EXPO-contents.github.io/fish.html';
   }
   else if(l_color==2 & r_color==0){ // BR LED4-1
     // to LAR html
@@ -454,7 +462,7 @@ function Jump(l_color, r_color){
   }
   else if(l_color==2 & r_color==1){ // BG LED4-2
     // to LAR html  <same as BR>
-    window.location.href = 'https://web.tuat.ac.jp/~yu-nakayama/luminaryar.html';
+    window.location.href = 'https://knart.theshop.jp/';
   }
   else if(l_color==2 & r_color==2){ // BB LED5
     // to neural html
