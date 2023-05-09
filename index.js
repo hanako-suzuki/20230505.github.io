@@ -282,7 +282,7 @@ function CountPixels(tMat, height, width, MatImage){
   let delta = 5;
   let w_list;
 
-  for(let row=10; row<height-10; row++){
+  for(let row=2; row<height-2; row++){
     // reset variables
     cnt = 0; // rowで検出されたピクセルをカウント
     start_x = width;
