@@ -24,7 +24,7 @@ promise.then(successCallback)
 
 function successCallback(stream) {
   video.srcObject = stream;
-  const FPS = 30;
+  const FPS = 10;
 
   // const width = canvas.width*1.5;
   // const height = canvas.height*4;
@@ -281,6 +281,7 @@ function CountPixels(tMat, height, width, MatImage){
   let lines = []; // [startPoint, endPoint]
   let delta = 5;
   let w_list;
+  let length_threshold = width*0.5;
 
   for(let row=10; row<height-10; row++){
     // reset variables
@@ -345,7 +346,7 @@ function CountPixels(tMat, height, width, MatImage){
       }
     }
   }
-  if(max_id != -1){ // if line is detected
+  if(max_id != -1 & max_length>length_threshold){ // if line is detected
 
     // calculate y
     let cand_y = [];
