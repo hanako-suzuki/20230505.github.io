@@ -279,7 +279,7 @@ function CountPixels(tMat, height, width, MatImage){
   let start_x = width;
   let end_x = 0;
   let lines = []; // [startPoint, endPoint]
-  let delta = 10;
+  let delta = 5;
   let w_list;
 
   for(let row=10; row<height-10; row++){
