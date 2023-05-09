@@ -131,7 +131,7 @@ function successCallback(stream) {
             //   outMat.ucharPtr(row,col)[2] = sum[2];
             // }
 
-            if(145<sum[0] & sum[0]<185 & sum[1]<120 & 80<sum[2] & sum[2]<120){ // iPhone application
+            if(115<sum[0] & sum[0]<185 & sum[1]<120 & 80<sum[2] & sum[2]<140){ // iPhone application
               outMat.ucharPtr(row,col)[0] = sum[0];
               outMat.ucharPtr(row,col)[1] = sum[1];
               outMat.ucharPtr(row,col)[2] = sum[2];
@@ -274,7 +274,7 @@ function CountPixels(tMat, height, width, MatImage){
   // set variables
   let imgMat = MatImage.clone();
   let outMat = tMat.clone();
-  let num = width*0.1;
+  let num = width*0.5;
   let cnt = 0;
   let start_x = width;
   let end_x = 0;
