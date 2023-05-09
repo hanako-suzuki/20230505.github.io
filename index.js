@@ -429,7 +429,7 @@ function CountPixels(tMat, height, width, MatImage){
     textArea.innerHTML = ' count:' + String(tmp_color[l_idx]) + ', ' + String(tmp_color[r_idx]);
   }
 
-  // cv.imshow("canvas", imgMat);
+  cv.imshow("canvas", imgMat);
 }
 
 function Jump(l_color, r_color){
