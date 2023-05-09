@@ -274,7 +274,7 @@ function CountPixels(tMat, height, width, MatImage){
   // set variables
   let imgMat = MatImage.clone();
   let outMat = tMat.clone();
-  let num = width*0.5;
+  let num = width*0.1;
   let cnt = 0;
   let start_x = width;
   let end_x = 0;
