@@ -119,23 +119,23 @@ function successCallback(stream) {
             //   outMat.ucharPtr(row,col)[1] = sum[1];
             //   outMat.ucharPtr(row,col)[2] = sum[2];
             // }
-            // if(115<sum[0] & sum[0]<155 & sum[1]<90 & 80<sum[2] & sum[2]<140){ // display
-            //   outMat.ucharPtr(row,col)[0] = sum[0];
-            //   outMat.ucharPtr(row,col)[1] = sum[1];
-            //   outMat.ucharPtr(row,col)[2] = sum[2];
-            //   // console.log("x:", col, " y:", row, " sum:", sum);
-            // }
+            if(115<sum[0] & sum[0]<155 & sum[1]<90 & 80<sum[2] & sum[2]<140){ // display
+              outMat.ucharPtr(row,col)[0] = sum[0];
+              outMat.ucharPtr(row,col)[1] = sum[1];
+              outMat.ucharPtr(row,col)[2] = sum[2];
+              // console.log("x:", col, " y:", row, " sum:", sum);
+            }
             // if(140<sum[0] & sum[0]<220 & sum[1]<120 & 80<sum[2] & sum[2]<160){ // iPhone application
             //   outMat.ucharPtr(row,col)[0] = sum[0];
             //   outMat.ucharPtr(row,col)[1] = sum[1];
             //   outMat.ucharPtr(row,col)[2] = sum[2];
             // }
 
-            if(125<sum[0] & sum[0]<165 & sum[1]<90 & 60<sum[2] & sum[2]<120){ // iPhone application
-              outMat.ucharPtr(row,col)[0] = sum[0];
-              outMat.ucharPtr(row,col)[1] = sum[1];
-              outMat.ucharPtr(row,col)[2] = sum[2];
-            }
+            // if(125<sum[0] & sum[0]<165 & sum[1]<90 & 60<sum[2] & sum[2]<120){ // iPhone application
+            //   outMat.ucharPtr(row,col)[0] = sum[0];
+            //   outMat.ucharPtr(row,col)[1] = sum[1];
+            //   outMat.ucharPtr(row,col)[2] = sum[2];
+            // }
           }
         }
 
