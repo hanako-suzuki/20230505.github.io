@@ -220,7 +220,7 @@ function houghDetection(tMat, height, width, MatImage1){
     let mid_x = parseInt((fuse_lines[max_id][0].x+fuse_lines[max_id][1].x)/2);
     let mid_y = fuse_lines[max_id][0].y;
     let tmp_length = max_length/4;
-    let diff_length = parseInt(tmp_length/2);
+    let diff_length = parseInt(tmp_length/2)-10;
     let l_sum = [0,0,0];
     let r_sum = [0,0,0];
     let l_max = 0;
@@ -279,7 +279,7 @@ function CountPixels(tMat, height, width, MatImage){
   let start_x = width;
   let end_x = 0;
   let lines = []; // [startPoint, endPoint]
-  let delta = 5;
+  let delta = 10;
   let w_list;
 
   for(let row=10; row<height-10; row++){
